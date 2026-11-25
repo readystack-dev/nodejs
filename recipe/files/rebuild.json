@@ -1,0 +1,31 @@
+{
+  "bases": [
+    {
+      "digest": "sha256:9a04f13b3f80ef056361e30868593b1cfd2279fe19e4081cb93a90bf56819d6a",
+      "layout": "bases/ubuntu_24.04_9c7f200c07e3.oci",
+      "ref": "ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289"
+    }
+  ],
+  "engine": {
+    "archive": "toolchain/buildkit.tar",
+    "image_digest": "sha256:e0e67ea9c4bb07bdef683e29f70f3b623d1eb9c82274a9ec04e6bb0511449fb0",
+    "kind": "buildkit",
+    "tag": "moby/buildkit:v0.31.2"
+  },
+  "inputs": {
+    "context": ".",
+    "dockerfile": "Dockerfile.offline.pinned",
+    "mtime_policy": "clamp",
+    "source_date_epoch": 1795159451,
+    "tree_hash": "sha256:332192167670558850a52c006b41a37157c2ff2b8a2bf7f0e23e42b8b114efa1"
+  },
+  "probe": {
+    "skip": "this image is a language runtime with no long-running service; the digest match above proves the rebuild, and `docker run --rm <image> node -v` runs it"
+  },
+  "schema": "readystack-rebuild-bundle/v0.1",
+  "subject": {
+    "config_digest": "sha256:09d5f3e06caf7ff15a07caf958e0c5a9a8dc4abd09e99ade1d91af21e84f2641",
+    "image_manifest_digest": "sha256:d61cd8ac183b8dc5c28c4446b8125cb1e64ad905bbf8991b5bfed5ee18bf8b2d",
+    "name": "docker.io/readystack/nodejs:26.13.1-CE-ubuntu24.04-r2"
+  }
+}

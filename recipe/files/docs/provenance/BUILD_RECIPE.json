@@ -1,0 +1,43 @@
+{
+  "schema": "kitforge.build_recipe.v1",
+  "slug": "nodejs",
+  "image": "readystack/nodejs:26.13.1-CE-ubuntu24.04-r2",
+  "build_method": "source-rebuild-c",
+  "source": {
+    "repo": "https://github.com/nodejs/node",
+    "ref": "v26.13.1",
+    "commit": "e9c277643b0249c50f6e6de5413be8a88ea11b6a",
+    "source_date_epoch": 1795159451,
+    "source_date_epoch_provenance": "the time release 26.13.1-CE-ubuntu24.04-r2 was cut (2026-11-20T07:24:11Z), by scripts/rerelease-agenda.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit e9c277643b02, dated 2026-11-10T18:41:03Z (source.commit_epoch).",
+    "build_system": "make",
+    "builder_image": "ubuntu:24.04",
+    "build_packages": [
+      "build-essential",
+      "python3",
+      "ca-certificates"
+    ],
+    "build_cmds": [
+      "./configure --prefix=/opt/node",
+      "make -j\"$(nproc)\"",
+      "make install",
+      "/opt/node/bin/node -v | grep -qx v26.13.1 && /opt/node/bin/node /opt/node/lib/node_modules/npm/bin/npm-cli.js -v | grep -qx 11.21.2",
+      "/opt/node/bin/node -e \"const c=require('crypto');if(c.createHash('sha256').update('readystack').digest('hex').length!==64)process.exit(1);if(new Intl.DateTimeFormat('de-DE',{month:'long'}).format(new Date(Date.UTC(2026,10,8)))!=='November')process.exit(1)\""
+    ],
+    "install_prefix": "/opt/node",
+    "vendored_deps": true,
+    "_build_note": "Node.js vendors every dependency in its own tree (deps/: V8, libuv, OpenSSL 3.5.9, ICU 78 with full data, llhttp, nghttp2, ngtcp2, brotli, zlib, simdjson, ada, npm 11.20.0, which source_prep replaces with npm 11.21.2): configure (a python3 script) and make build them from source, with no download. `make install` lays down /opt/node/bin/node, the npm and npx links, /opt/node/lib/node_modules/npm and the headers in /opt/node/include (node-gyp builds native addons against them, in a stage that has a compiler). The checks after it refuse a build whose node or npm is not the expected version, whose crypto does not hash, or whose ICU has no German month names (small-icu would print 'M11'). Measured 2026-11-08: configure succeeds on ubuntu:24.04 (gcc 13.3, python 3.12). Tests: Node's own suite (tools/test.py) is not run in the offline build: much of it needs the network, a TTY or timing; the program set (seed_plan) runs in the image instead.",
+    "source_prep": [
+      "python3 -c \"import urllib.request; urllib.request.urlretrieve('https://registry.npmjs.org/npm/-/npm-11.21.2.tgz', '/tmp/npm.tgz')\" && echo '8ad8563b81e71b90ef405b140bccf3ba9b5e7884ab210bd49ee4e2f4bc6f61f5  /tmp/npm.tgz' | sha256sum -c - && rm -rf deps/npm && mkdir deps/npm && tar -xzf /tmp/npm.tgz --strip-components=1 -C deps/npm && rm -f /tmp/npm.tgz && grep -q '\"version\": \"11.21.2\"' deps/npm/package.json && grep -q '\"version\": \"6.29.1\"' deps/npm/node_modules/undici/package.json && grep -q '\"version\": \"5.0.12\"' deps/npm/node_modules/brace-expansion/package.json"
+    ],
+    "_source_prep_note": "npm 11.21.2 replaces the npm 11.20.0 that tag v26.13.0 carries in deps/npm, the way Node.js updates npm itself (tools/dep_updaters/update-npm.sh: download the npm release tarball, rm -rf deps/npm, extract it there with --strip-components=1). Chain 867's own scan (2026-11-08) found 6 fixable highs, all in npm 11.20.0's bundled packages: undici 6.28.0 (CVE-2026-87018, CVE-2026-19534, CVE-2026-109869, CVE-2026-109383; fixed in 6.29.1) and brace-expansion 5.0.9 (CVE-2026-102278, CVE-2026-102276; fixed in 5.0.11). npm 11.21.2 (2026-11-04), the newest npm 11 release, bundles undici 6.29.1 and brace-expansion 5.0.12. npm 11 is the line Node.js 26 ships, so the newer npm 12 is not used. npm 11.21.2 declares engines node ^20.17.0 || >=22.9.0. The tarball is the registry's (sha512 integrity sha512-7HPApk+AflMUavSseL1Pm6CnYqMIHk53x+KmuhqmTDqPkjPMgxIpTPcTqsE91EKNw4gFBJV9fnXiSdGm1DXq9A==, the same bytes as the sha256 checked here). The vendor stage has python3 and no curl, so python3 downloads it. The step refuses a tree whose npm, undici or brace-expansion is not the expected version. Node's own deps/undici (compiled into node as its fetch) and deps/minimatch are not npm's copies and are unchanged.",
+    "source_date_epoch_basis": "release-cut",
+    "commit_epoch": 1794336063
+  },
+  "product_kind": "runtime",
+  "binaries_from_source": null,
+  "runtime_packages": [
+    "ca-certificates",
+    "libstdc++6",
+    "tzdata"
+  ]
+}

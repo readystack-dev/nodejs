@@ -1,0 +1,72 @@
+{
+  "apt_refresh": [
+    {
+      "min_version": "5.38.2-3.2ubuntu0.7",
+      "package": "perl-base",
+      "reason": "USN-9006-1: perl-base 5.38.2-3.2ubuntu0.6 -> 5.38.2-3.2ubuntu0.7"
+    },
+    {
+      "min_version": "2.39-0ubuntu8.12",
+      "package": "libc-bin",
+      "reason": "UBUNTU-CVE-2026-84243: libc-bin 2.39-0ubuntu8.9 -> 2.39-0ubuntu8.12"
+    }
+  ],
+  "build_method": "source-rebuild-c",
+  "chain_id": 1129,
+  "dep_bumps": [],
+  "expected_residuals": [],
+  "images": [
+    {
+      "digest": "sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289",
+      "ref": "ubuntu:24.04",
+      "role": "builder"
+    },
+    {
+      "digest": "sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289",
+      "ref": "ubuntu:24.04",
+      "role": "offline_builder"
+    },
+    {
+      "digest": "sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289",
+      "ref": "ubuntu:24.04",
+      "role": "base"
+    }
+  ],
+  "mod_replaces": [],
+  "runtime_packages": [
+    "ca-certificates",
+    "libstdc++6",
+    "tzdata"
+  ],
+  "schema": "kitforge.toolchain_lock.v1",
+  "slug": "nodejs",
+  "source": {
+    "build_cmds": [
+      "./configure --prefix=/opt/node",
+      "make -j\"$(nproc)\"",
+      "make install",
+      "/opt/node/bin/node -v | grep -qx v26.13.1 && /opt/node/bin/node /opt/node/lib/node_modules/npm/bin/npm-cli.js -v | grep -qx 11.21.2",
+      "/opt/node/bin/node -e \"const c=require('crypto');if(c.createHash('sha256').update('readystack').digest('hex').length!==64)process.exit(1);if(new Intl.DateTimeFormat('de-DE',{month:'long'}).format(new Date(Date.UTC(2026,10,8)))!=='November')process.exit(1)\""
+    ],
+    "build_packages": [
+      "build-essential",
+      "python3",
+      "ca-certificates"
+    ],
+    "build_system": "make",
+    "builder_image": "ubuntu:24.04",
+    "commit": "e9c277643b0249c50f6e6de5413be8a88ea11b6a",
+    "commit_epoch": 1794336063,
+    "install_prefix": "/opt/node",
+    "ref": "v26.13.1",
+    "repo": "https://github.com/nodejs/node",
+    "source_date_epoch": 1795159451,
+    "source_date_epoch_basis": "release-cut",
+    "source_date_epoch_provenance": "the time release 26.13.1-CE-ubuntu24.04-r2 was cut (2026-11-20T07:24:11Z), by scripts/rerelease-agenda.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit e9c277643b02, dated 2026-11-10T18:41:03Z (source.commit_epoch).",
+    "source_prep": [
+      "python3 -c \"import urllib.request; urllib.request.urlretrieve('https://registry.npmjs.org/npm/-/npm-11.21.2.tgz', '/tmp/npm.tgz')\" && echo '8ad8563b81e71b90ef405b140bccf3ba9b5e7884ab210bd49ee4e2f4bc6f61f5  /tmp/npm.tgz' | sha256sum -c - && rm -rf deps/npm && mkdir deps/npm && tar -xzf /tmp/npm.tgz --strip-components=1 -C deps/npm && rm -f /tmp/npm.tgz && grep -q '\"version\": \"11.21.2\"' deps/npm/package.json && grep -q '\"version\": \"6.29.1\"' deps/npm/node_modules/undici/package.json && grep -q '\"version\": \"5.0.12\"' deps/npm/node_modules/brace-expansion/package.json"
+    ],
+    "vendored_deps": true
+  },
+  "version": "26.13.1"
+}

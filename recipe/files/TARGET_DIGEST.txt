@@ -1,0 +1,9 @@
+image_manifest_digest=sha256:d61cd8ac183b8dc5c28c4446b8125cb1e64ad905bbf8991b5bfed5ee18bf8b2d
+config_digest=sha256:09d5f3e06caf7ff15a07caf958e0c5a9a8dc4abd09e99ade1d91af21e84f2641
+tag=readystack/nodejs:26.13.1-CE-ubuntu24.04-r2
+probe_port=80
+probe_path=/
+probe_timeout=180
+probe_exec=node -e 'process.exit(0)'
+verify_boot=skip
+verify_boot_reason=this image is a language runtime with no long-running service; the digest match above proves the rebuild, and `docker run --rm <image> node -v` runs it

@@ -1,0 +1,9 @@
+{
+  "schema": "kitforge.source_tree_hash.v1",
+  "slug": "nodejs",
+  "repo": "https://github.com/nodejs/node",
+  "ref": "v26.13.1",
+  "commit": "e9c277643b0249c50f6e6de5413be8a88ea11b6a",
+  "tree_listing_sha256": "93bab83f1af3497de22f540b555e1936607b01ce148ef482172182a4e1cc8a01",
+  "file_count": 52300
+}
